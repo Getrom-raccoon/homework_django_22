@@ -1,11 +1,12 @@
 """Командная утилита Django для административных задач."""
+
 import os
 import sys
 
 
 def main():
     """Выполнение административных задач."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_store.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_store.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -17,5 +18,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
