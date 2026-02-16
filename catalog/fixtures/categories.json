@@ -1,0 +1,52 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Рассылки",
+      "description": "Программы для автоматизации email-рассылок",
+      "created_at": "2023-10-01T10:00:00Z",
+      "updated_at": "2023-10-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Телеграм боты",
+      "description": "Готовые решения для Telegram ботов",
+      "created_at": "2023-10-01T10:05:00Z",
+      "updated_at": "2023-10-01T10:05:00Z"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Полезные утилиты",
+      "description": "Вспомогательные программы для разработчиков",
+      "created_at": "2023-10-01T10:10:00Z",
+      "updated_at": "2023-10-01T10:10:00Z"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "name": "Веб-приложения",
+      "description": "Готовые веб-приложения и шаблоны",
+      "created_at": "2023-10-01T10:15:00Z",
+      "updated_at": "2023-10-01T10:15:00Z"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 5,
+    "fields": {
+      "name": "Микросервисы",
+      "description": "Архитектурные решения на основе микросервисов",
+      "created_at": "2023-10-01T10:20:00Z",
+      "updated_at": "2023-10-01T10:20:00Z"
+    }
+  }
+]
