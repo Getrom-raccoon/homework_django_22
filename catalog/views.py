@@ -1,15 +1,28 @@
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product
 
-def home(request):
-    """Контроллер главной страницы"""
-    products = Product.objects.all()
-    return render(request, 'catalog/home.html', {'products': products})
 
-def contacts(request):
-    return render(request, 'catalog/contacts.html')
+class HomeListView(ListView):
+    """Контроллер главной страницы с выводом всех продуктов"""
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
-def product_detail(request, pk):
+
+class ProductDetailView(DetailView):
     """Контроллер страницы товара"""
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'catalog/product_detail.html', {'product': product})
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+
+
+class ContactsTemplateView(TemplateView):
+    """Контроллер страницы контактов"""
+    template_name = 'catalog/contacts.html'
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
+        print(f'Новое сообщение от {name} ({phone}): {message}')
+        return self.render_to_response({})
