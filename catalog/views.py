@@ -1,5 +1,8 @@
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.urls import reverse_lazy
+from django.shortcuts import render
 from .models import Product
+from .forms import ProductForm
 
 
 class HomeListView(ListView):
@@ -14,6 +17,32 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
+
+
+class ProductCreateView(CreateView):
+    """Контроллер создания продукта"""
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('home')
+
+
+class ProductUpdateView(UpdateView):
+    """Контроллер редактирования продукта"""
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('home')
+
+    def get_success_url(self):
+        return reverse_lazy('product_detail', kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    """Контроллер удаления продукта"""
+    model = Product
+    template_name = 'catalog/product_confirm_delete.html'
+    success_url = reverse_lazy('home')
 
 
 class ContactsTemplateView(TemplateView):

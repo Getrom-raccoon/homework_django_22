@@ -1,0 +1,36 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Удаление продукта{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h3>Подтверждение удаления</h3>
+                </div>
+                <div class="card-body">
+                    <p>Вы уверены, что хотите удалить продукт "{{ object.name }}"?</p>
+                    
+                    {% if object.image %}
+                    <div class="text-center mb-3">
+                        <img src="{{ object.image.url }}" alt="{{ object.name }}" style="max-height: 150px;">
+                    </div>
+                    {% endif %}
+                    
+                    <p><strong>Цена:</strong> {{ object.price }} руб.</p>
+                    <p><strong>Категория:</strong> {{ object.category.name }}</p>
+                    <p class="text-danger"><strong>Это действие нельзя отменить!</strong></p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                        <a href="{% url 'product_detail' object.pk %}" class="btn btn-secondary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
