@@ -30,3 +30,24 @@
     </div>
 </div>
 {% endblock %}
+
+<div class="col-3">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+        </div>
+        <div class="card-body">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="max-height: 150px; object-fit: contain;">
+            {% endif %}
+            <h1 class="card-title pricing-card-title">{{ product.price }} руб.</h1>
+            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+
+            <div class="btn-group" role="group">
+                <a href="{% url 'product_detail' product.pk %}" class="btn btn-sm btn-outline-primary">Просмотр</a>
+                <a href="{% url 'product_update' product.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                <a href="{% url 'product_delete' product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>
