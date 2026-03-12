@@ -27,7 +27,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog',
     'blog',
+    'users',
 ]
+
+# Настройки для авторизации по email
+AUTH_USER_MODEL = 'users.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Промежуточное ПО
 MIDDLEWARE = [
@@ -105,7 +111,7 @@ STATICFILES_DIRS = [
 
 # Медиа файлы
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Автоматическое поле по умолчанию
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
