@@ -51,3 +51,11 @@
         </div>
     </div>
 </div>
+<div class="btn-group" role="group">
+    <a href="{% url 'product_detail' product.pk %}" class="btn btn-sm btn-outline-primary">Просмотр</a>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'product_update' product.pk %}" class="btn btn-sm btn-outline-secondary">Редактировать</a>
+        <a href="{% url 'product_delete' product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+    {% endif %}
+</div>
