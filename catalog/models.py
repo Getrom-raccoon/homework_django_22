@@ -1,5 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class Category(models.Model):
     """Модель категории продуктов"""
@@ -61,7 +63,7 @@ class Product(models.Model):
     )
 
     category = models.ForeignKey(
-        Category,
+        'Category',
         on_delete=models.SET_NULL,
         verbose_name='Категория продукта',
         help_text='Выберите категорию продукта',
@@ -86,6 +88,35 @@ class Product(models.Model):
         auto_now=True,
         verbose_name='Дата последнего обновления'
     )
+
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        verbose_name='Владелец',
+        help_text='Пользователь, создавший продукт',
+        null=True,
+        blank=True,
+        related_name='products'
+    )
+
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name='Опубликовано',
+        help_text='Отметьте, чтобы опубликовать продукт'
+    )
+
+    class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
+        ordering = ['name', 'category']
+
+        permissions = [
+            ('can_unpublish_product', 'Может отменять публикацию продукта'),
+            ('can_delete_any_product', 'Может удалять любой продукт'),
+        ]
+
+    def __str__(self):
+        return f"{self.name} - {self.price} руб."
 
     class Meta:
         verbose_name = 'Продукт'
