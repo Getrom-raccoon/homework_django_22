@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from .managers import CustomUserManager
 
 
 class User(AbstractUser):
@@ -8,7 +9,6 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name='Email')
 
-    # Дополнительные поля
     avatar = models.ImageField(
         upload_to='users/avatars/',
         verbose_name='Аватар',
@@ -35,6 +35,9 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    # Используем кастомный менеджер
+    objects = CustomUserManager()
 
     class Meta:
         verbose_name = 'Пользователь'
