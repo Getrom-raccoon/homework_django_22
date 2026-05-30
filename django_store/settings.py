@@ -123,3 +123,27 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'getromgleb@gmail.com'
 EMAIL_HOST_PASSWORD = 'onus ojfr nolq ojpk'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Настройки кеширования с Redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'CONNECTION_POOL_CLASS_KWARGS': {
+                'max_connections': 50,
+                'timeout': 20,
+            },
+            'MAX_CONNECTIONS': 1000,
+            'PICKLE_VERSION': -1,
+        },
+        'KEY_PREFIX': 'skystore',
+        'TIMEOUT': 300
+    }
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'

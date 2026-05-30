@@ -1,12 +1,31 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth import get_user_model
-from .models import Product
+from django.core.cache import cache
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView, UpdateView)
 from .forms import ProductForm, ProductModeratorForm
+from .models import Category, Product
+from .services import get_products_by_category
 
 User = get_user_model()
+
+
+def category_products_view(request, category_id):
+    """
+    Представление для отображения всех продуктов в указанной категории
+    """
+    category = get_object_or_404(Category, pk=category_id)
+
+    products = get_products_by_category(category_id)
+
+    context = {
+        'category': category,
+        'products': products,
+        'products_count': len(products) if products else 0,
+    }
+
+    return render(request, 'catalog/category_products.html', context)
 
 
 class HomeListView(ListView):
@@ -18,13 +37,37 @@ class HomeListView(ListView):
     def get_queryset(self):
         return Product.objects.filter(is_published=True).order_by('name')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
-    """Контроллер страницы товара"""
+    """Контроллер страницы товара с кешированием"""
     model = Product
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
     login_url = 'users:login'
+
+    def get_object(self, queryset=None):
+        """Получаем объект с кешированием"""
+        pk = self.kwargs.get('pk')
+
+        cache_key = f'product_{pk}'
+        product = cache.get(cache_key)
+
+        if not product:
+            product = super().get_object(queryset)
+            cache.set(cache_key, product, timeout=300)
+            print(f'Данные продукта {pk} загружены из БД и сохранены в кеш')
+        else:
+            print(f'Данные продукта {pk} загружены из кеша Redis')
+
+        product.views_count += 1
+        product.save()
+
+        return product
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -115,3 +158,4 @@ class ContactsTemplateView(TemplateView):
         message = request.POST.get('message')
         print(f'Новое сообщение от {name} ({phone}): {message}')
         return self.render_to_response({})
+
